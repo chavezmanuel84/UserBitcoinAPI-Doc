@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/user_bit_api_styles.css">
+    <title>User Bitcoin API Documentation</title>
+</head>
+
+<body>
+    <div class="doc-container">
+        <div class="left-doc-column">
+            <!-- Documentation title and introduction -->
+            <h1>User Bitcoin API Documentation</h1>
+            <p>Welcome to the User Bitcoin API Documentation. Whether you're an experienced developer or just starting out, this guide will help you to seamlessly integrate our API into your projects. We've built clear, step-by-step instructions for effective use, and at the end, you'll find interactive examples that provide hands-on experience with our API's responses. </p>
+            <br>
+            <!-- Base URL -->
+            <h2>Base URL</h2>
+            <p>The base URL for all API endpoints is:</p>
+
+            <div id="inst">
+                &nbsp https://8j5baasof2.execute-api.us-west-2.amazonaws.com/production
+            </div>
+
+            <!-- Authentication -->
+            <h2>Authentication</h2>
+                <p> Authentication is required for most endpoints. After successfully logging in, you will receive a unique token (your-auth-token) 
+                    that must be included in the request headers of subsequent calls as follows:
+                </p>
+            <div id="inst">
+                &nbsp Header: Token<br/>
+                &nbsp Value: your-auth-token
+            </div>
+
+            <!-- Endpoints -->
+            <h2>Endpoints</h2>
+
+            <!-- Create User Endpoint -->
+            <section id="create-user">
+                <h3>&nbsp 1. Create User</h3>
+                <p>Create a new user and choose a password (7 characters max) by sending a POST request:</p>
+                <div id="inst">
+                    &nbsp POST /users/new
+                </div>
+                <p>Request Body(JSON):</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Username": "new-username",<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Password": "new-password" <br/>
+                    &nbsp }
+                    </code>
+                </div>
+                <p>Response:</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                        &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "new-user-id",<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "new-username"<br/>
+                        &nbsp&nbsp&nbsp&nbsp } <br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+                        
+                <p>This endpoint allows you to create a new user with a password.</p>
+
+            </section>
+
+            <!-- Login Endpoint -->
+            <section id="login">
+                <h3>&nbsp 2. Login</h3>
+                <p>Once the user is created, authenticate using your credentials by sending a POST request:</p>
+                <div id="inst">
+                    &nbsp POST /users/login
+                </div>
+                <p>Request Body(JSON):</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Username": "new-username",<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Password": "new-password" <br/>
+                    &nbsp }
+                    </code>
+                </div>
+                <p>Response:</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Duration": 451,<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "Welcome!",<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Token": your-auth-token<br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+                <p>This endpoint returns a token (your-auth-token) you should include in the headers of subsequent requests.</p>
+            </section>
+
+            <!-- Get User Endpoint -->
+            <section id="get-user">
+                <h3>&nbsp 3. Get User</h3>
+                <p>Now you can retrieve the information of any user created before (any-username) in HTML or TSV format, by sending a GET request:</p>
+                <div id="inst">
+                    &nbsp GET /users/any-username.html
+                </div>
+                <p>Or</p>
+                <div id="inst">
+                    GET /users/any-username.tsv
+                </div>
+                <p>Remember you should now use "your-auth-token" as a header for your request:</p>
+                <div id="inst">
+                    &nbsp Header: Token<br/>
+                    &nbsp Value: "your-auth-token"
+                </div>
+                <p>Response (HTML):</p>
+                <div id="inst">
+                    &lt;!doctype html&gt;<br>
+                    &lt;html&gt;<br>
+                    &lt;body&gt;ID: "user-id" Username: "any-username" Amount: "user-amount" &lt;/body&gt;<br>
+                    &lt;/html&gt;
+                </div>
+
+                <p>Response (TSV):</p>
+                <div id ="inst">
+                    ID &nbsp&nbsp Username &nbsp&nbsp Amount<br/>
+                    "user-id" "any-username"   "user-amount"
+                </div>
+                <p>Where "user-amount" is the amount of Bitcoins of this specific user "any-username"</p>
+            </section>
+
+            <!-- Update User Endpoint -->
+            <section id="update-user">
+                <h3>&nbsp 4. Update User</h3>
+                <p>You may want to update any user's password. For this you must use the user’s token (your-auth-token) as a header, and use the following PATCH request:</p>
+                <div id="inst">
+                    &nbsp PATCH /users/update
+                </div>
+                <p>Request Body(JSON):</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "new_password": "new-password"<br/>
+                    &nbsp }
+                    </code>
+                </div>
+                <p>Remember, as a header you should now use "your-auth-token" relative to the "username" you wish to update:</p>
+                <div id="inst">
+                    &nbsp Header: Token<br/>
+                    &nbsp Value: "your-auth-token"
+                </div>
+                <p>Response:</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                        &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "user-id",<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "username"<br/>
+                        &nbsp&nbsp&nbsp&nbsp } <br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+            </section>
+
+            <!-- Transfer Bitcoin Endpoint -->
+            <section id="bitcoin-transfer">
+                <h3>&nbsp 5. Bitcoin transfer</h3>
+                <p>You can transfer bitcoins between users. What you need:</p>
+                <ul><li>Token from the origin user (origin-auth-token) in the headers of your request</li></ul></section>
+                <div id="inst">
+                    &nbsp Header: Token<br/>
+                    &nbsp Value: "your-auth-token"
+                </div>
+                <br><ul><li>The username of the destination user (recipient-username), and the amount of bitcoins as an integer (bitcoin_transfer) you want to transfer</li></ul>
+                <p>POST Request:</p>
+                <div id="inst">
+                    &nbsp POST /users/transfer
+                </div>
+                
+                <p>Request Body(JSON):</p>
+                
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "To": "recipient-username",<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Amount": "bitcoin_transfer"<br/>
+                    &nbsp }
+                    </code>
+                </div>
+
+                <p>Response:</p>
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                        &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "origin-user-id",<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "origin-username"<br/>
+                        &nbsp&nbsp&nbsp&nbsp } <br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+            </section><br><br><br>
+
+    
+        </div>
+
+        <div class="right-doc-column">
+            <!-- Right column for static information -->
+            <h2>Contents</h2>
+            <a href="#create-user"> Create User enpoint</a><br>
+            <a href="#login"> Login endpoint</a><br>
+            <a href="#get-user"> Get User endpoint</a><br>
+            <a href="#update-user"> Update User enpoint</a><br>
+            <a href="#bitcoin-transfer"> Bitcoin transfer enpoint</a><br><br>
+            <a href="#demo-instructions"> Interactive API DEMO</a><br>
+
+            <h2>Resources</h2>
+
+            <span>Our Postman collection:</span><br>
+            <div class="postman-run-button"
+            data-postman-action="collection/fork"
+            data-postman-visibility="public"
+            data-postman-var-1="29416042-714c4e9c-737a-4f06-9901-09dcc55e75f0"
+            data-postman-collection-url="entityId=29416042-714c4e9c-737a-4f06-9901-09dcc55e75f0&entityType=collection&workspaceId=9d4aa66f-288b-4005-8bee-de2097e11575"
+            data-postman-param="env%5BUser_Bitcoin_Env%5D=W10="></div>
+            <script type="text/javascript">
+              (function (p,o,s,t,m,a,n) {
+                !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
+                !o.getElementById(s+t) && o.getElementsByTagName("head")[0].appendChild((
+                  (n = o.createElement("script")),
+                  (n.id = s+t), (n.async = 1), (n.src = m), n
+                ));
+              }(window, document, "_pm", "PostmanRunObject", "https://run.pstmn.io/button.js"));
+            </script>
+
+            <br><br><span>Our Python Library</span><br>
+            <img src="images/python-logo-only.png" alt="Python Logo">
+            <img src="images/github-mark-white.png" alt="Github Logo"><br><br>
+            
+            <br><h2>Contact info</h2>
+            <a href="mailto:bitcoin-api-expert@apiexperts.com.co"> Our API experts</a>
+            
+
+
+            <h2>Related content</h2>
+            <a href="https://learning.postman.com/docs/collections/using-collections/">Postman collections Tutorial</a>
+            <p></p>
+
+        </div>
+    </div>    
+
+
+    
+        <br><br><h1>Interactive API DEMO Instructions</h1>
+
+    <section id="demo-instructions">
+        <div class="demo-container">
+            <div class="left-demo-column">
+            <!-- Left column demo instructions -->
+                <p>Now that you have a good understanding of how to use our User Bitcoin API, 
+                    we invite you to explore its functionality through the interactive examples below. 
+                    These demonstrations will walk you through various scenarios and showcase how to 
+                    interact with the API effectively. To get started, follow the steps outlined below and examine the responses you receive to see how our API responds in different situations.</p>
+                <h3>Follow the steps below and examine the responses you receive in different situations:</h3>
+                <ul><li><h4>1. Fill the "Create User Form" with the following credentials, and clic the Create User button: </h4> 
+                    - Username: example_user1 <br> 
+                    - Password: 1234567 <br><br>
+                <b>Expected Response Format:</b></li>
+
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                        &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "new-user-id",<br/>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "new-username"<br/>
+                        &nbsp&nbsp&nbsp&nbsp } <br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+                    
+                <li><h4>2. To log in, fill the Login Form with the same credentials, and clic the Login button: </h4> 
+                    - Username: example_user1 <br> 
+                    - Password: 1234567<br><br>
+                <b>Expected Response Format:</b></li>
+                
+                <div id="inst">
+                    <code>
+                    &nbsp { <br/>
+                        &nbsp&nbsp&nbsp&nbsp "Duration": 451,<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Message": "Welcome!",<br/>
+                        &nbsp&nbsp&nbsp&nbsp "Token": your-auth-token<br/>
+                    &nbsp } <br/>
+                    </code>
+                </div>
+
+                <li><h4>3. Retreive user information with the "Get User Form": </h4>
+                    - Token from user: Copy the token from the response in step 2 "your-auth-token"<br>
+                    - Username: example_user1 <br> 
+                    - Ouput format: Choose html or tsv <br><br>
+                    <b>Expected Response Format:</b></li>
+
+                    <p>HTML:</p>
+                    <div id="inst">
+                        &lt;!doctype html&gt;<br>
+                        &lt;html&gt;<br>
+                        &lt;body&gt;ID: "user-id" Username: "any-username" Amount: "user-amount" &lt;/body&gt;<br>
+                        &lt;/html&gt;
+                    </div>
+
+                    <p>TSV:</p>
+                    <div id ="inst">
+                        ID &nbsp&nbsp Username &nbsp&nbsp Amount<br/>
+                        "user-id" "any-username"   "user-amount"
+                    </div>
+                    <p>Where "user-amount" is the amount of Bitcoins of this specific user "any-username"</p>
+                
+                <li><h4>4. Attempt to log in with an incorrect password or a username that doesn't exist:</h4>
+                    - Username: example_user1 <br> 
+                    - Password: any different password <br><br>
+                    <b>Expected Response Format:</b></li>
+                
+                    <p>Wrong password:</p>
+                    <div id="inst">
+                        <code>
+                        &nbsp { <br/>
+                            &nbsp&nbsp&nbsp&nbsp "Duration": 451,<br/>
+                            &nbsp&nbsp&nbsp&nbsp "Message": "Wrong password",<br/>
+                        &nbsp } <br/>
+                        </code>
+                    </div>
+
+                    <p>Unexisting user:</p>
+                    <div id="inst">
+                        <code>
+                        &nbsp { <br/>
+                            &nbsp&nbsp&nbsp&nbsp "Message": "User not found",<br/>
+                        &nbsp } <br/>
+                        </code>
+                    </div>
+
+                    
+                <li><h4>5. Using the "Update User Form" change the password of the created user: </h4>
+                    - New password: 7654321 <br>
+                    - Token from user: Copy the token from the response in step 2 "your-auth-token" from user example_user1<br><br> 
+
+                    <b>Expected Response Format:</b></li>
+
+                    <div id="inst">
+                        <code>
+                        &nbsp { <br/>
+                            &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                            &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "user-id",<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "example_user1"<br/>
+                            &nbsp&nbsp&nbsp&nbsp } <br/>
+                        &nbsp } <br/>
+                        </code>
+                    </div>
+                
+                <li><h4>6. Now, try creating 2 new users and transfer bitcoins between them with the Bitcoin Transfer Form:</h4>
+                    - First create 2 new users(use easy usernames and passwords you can remember)<br>
+                    - Login with both users, and copy the tokens from the responses. You will need the token from the origin (the sender)<br><br>
+
+                    - Fill in the form adn the clic the Transfer button:<br>
+
+                    &nbsp&nbsp&nbsp- Destination User: username of the destination user<br>
+                    &nbsp&nbsp&nbsp- Token from origin user: use the token you got after loggin in <br>
+                    &nbsp&nbsp&nbsp- Amount to transfer: start with 1 or 2 <br><br>
+
+                    <b>Expected Response Format:</b>
+                    <div id="inst">
+                        <code>
+                        &nbsp { <br/>
+                            &nbsp&nbsp&nbsp&nbsp "Message": "ok", <br/>
+                            &nbsp&nbsp&nbsp&nbsp "User": {<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp "ID": "origin-user-id",<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp "Username": "origin-username"<br/>
+                            &nbsp&nbsp&nbsp&nbsp } <br/>
+                        &nbsp } <br/>
+                        </code>
+                    </div><br/><br>
+
+                    After succesfully transfering, use the Get User Form to check the available Bitcoins for each user.<br><br>
+                    Repeat the process and check again<br><br></li>
+
+                   
+
+
+            </div>
+
+            
+                
+            <div class="right-demo-column">
+                <!-- Right column interactive examples -->
+                <section id="create-user-example">
+                    <h2>Create User Form</h2>
+                    <p>Use the form below to initiate a real Create User request:</p>
+                    <form id="create-user-form">
+                        <label for="create-user-username">Username:</label>
+                        <input type="text" id="create-user-username" placeholder="Enter username" required>
+                        <br>
+                        <label for="create-user-password">Password:</label>
+                        <input type="password" id="create-user-password" placeholder="Enter password" required>
+                        <br><br>
+                        <button type="submit" id="create-user-button">Create User</button>
+                    </form>
+                    <h3>Response:</h3>
+                    <pre id="create-user-response">
+                    <!-- Response is displayed here -->   
+                    </pre>
+                    <script src="create-user-script.js"></script>
+                </section>
+
+                <section id="login-example">
+                    <h2>Login Form</h2>
+                    <p>Use the form below to initiate a real User Login:</p>
+                    <form id="login-form">
+                        <label for="login-username">Username:</label>
+                        <input type="text" id="login-username" placeholder="Enter username" required>
+                        <br>
+                        <label for="login-password">Password:</label>
+                        <input type="password" id="login-password" placeholder="Enter password" required>
+                        <br><br>
+                        <button type="submit" id="login-button">Login</button>
+                    </form>
+
+                    <h3>Response:</h3>
+                    <pre id="login-response">
+                    <!-- Response is displayed here -->
+                    </pre>
+                    <script src="login-script.js"></script>
+                </section>
+
+                <section id="get-user-example">
+                    <h2>Get User Form</h2>
+                    <p>Use the form below to initiate a real GET user request:</p>
+                    <form id="get-user-form">
+                        <label for="get-user-username">Username to retrieve:</label>
+                        <input type="text" id="get-user-username" placeholder="Enter username" required>
+                        <br>
+                        <label for="get-user-token">Token from user:</label>
+                        <input type="text" id="get-user-token" placeholder="Enter user's token" required>
+                        <br>
+                        <label for="get-format-type">Choose the output format:</label>
+                        <select id="get-format-type" name="choice">
+                            <option value="html">html</option>
+                            <option value="tsv">tsv</option>
+                        </select>
+                        <br><br>
+                        <button type="submit" id="get-user-button">Get user</button>
+                    </form>
+
+                    <h3>Response:</h3>
+                    <pre id="get-user-response">
+                    <!-- Response is displayed here -->
+                    </pre>
+                    <script src="get-user-script.js"></script>
+                </section>
+
+                <section id="update-user-example">
+                    <h2>Update User Form</h2>
+                    <p>Use the form below to initiate a real Update User request:</p>
+                    <form id="update-user-form">
+                        <label for="update-user-password">New Password:</label>
+                        <input type="text" id="update-user-password" placeholder="Enter new password" required>
+                        <br>
+                        <label for="update-user-token">Token from user:</label>
+                        <input type="text" id="update-user-token" placeholder="Enter user's token" required>
+                        <br><br>
+                        <button type="submit" id="update-user-button">Update user</button>
+                    </form>
+
+                    <h3>Response:</h3>
+                    <pre id="update-user-response">
+                    <!-- Response is displayed here -->
+                    </pre>
+                    <script src="update-user-script.js"></script>
+                </section>
+
+                <section id="bitcoin-transfer">
+                    <h2>Bitcoin Transfer Form</h2>
+                    <p>Use the form below to initiate a real bitcoin transfer request between two users:</p>
+                    <form id="bitcoin-transfer-form">
+                        <label for="dest-user">Destination User:</label>
+                        <input type="text" id="dest-user" placeholder="Enter destination user" required>
+                        <br>
+                        <label for="origin-user-token">Token from origin user:</label>
+                        <input type="text" id="origin-user-token" placeholder="Enter origin user's token" required>
+                        <br>
+                        <label for="transfer-amount">Amount to transfer:</label>
+                        <input type="number" id="transfer-amount" placeholder="Enter amount to transfer" required>
+                        <br><br>
+                        <button type="submit" id="bitcoin-transfer-button">Transfer</button>
+                    </form>
+
+                    <h3>Response:</h3>
+                    <pre id="bitcoin-transfer-response">
+                    <!-- Response is displayed here -->
+                    </pre>
+                    <script src="bitcoin-trasnfer-script.js"></script>
+                </section>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
